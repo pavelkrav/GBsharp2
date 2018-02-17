@@ -1,0 +1,22 @@
+﻿<Window x:Class="GBsharp2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GBsharp2"
+        mc:Ignorable="d"
+        Title="GB Asteroids" Height="350" Width="525">
+    <Grid Name="MainGrid" Visibility="Visible" Background="#090C13">
+        <Grid Name="MainMenu" Visibility="Visible" Background="Transparent">
+            
+        </Grid>
+
+        <Grid Name="GameGrid" Visibility="Hidden" Background="Transparent">
+
+        </Grid>
+
+        <Grid Name="BackgroundGrid" Visibility="Visible" Background="Transparent">
+
+        </Grid>
+    </Grid>
+</Window>
