@@ -21,28 +21,76 @@ namespace GBsharp2
 {
 	public partial class MainWindow : Window
 	{
+		private Game _game;
+
 		public MainWindow()
 		{
 			InitializeComponent();
 
-			Game game = new Game(BackgroundGrid, GameGrid);
-			game.Background.Init(50);
-			game.Background.Draw();
-			game.StartAnimation();
+			_game = new Game(BackgroundGrid, GameGrid);
+			_game.StartAnimation();
 		}
 
 		protected override void OnInitialized(EventArgs e)
 		{
 			base.OnInitialized(e);
 
-			MainGrid.Width = this.Width;
-			MainGrid.Height = this.Height;
+			double w = this.Width;
+			double h = this.Height;
 
-			BackgroundGrid.Width = this.Width;
-			BackgroundGrid.Height = this.Height;
+			MainGrid.Width = w;
+			MainGrid.Height = h;
 
-			GameGrid.Width = this.Width;
-			GameGrid.Height = this.Height;
+			BackgroundGrid.Width = w;
+			BackgroundGrid.Height = h;
+
+			GameGrid.Width = w;
+			GameGrid.Height = h;
+
+			tblControls.Text = "Move : ← ↑ → ↓\nFire : Spacebar\nPause : P\nUnpause : U\nMain menu : Esc";
+		}
+
+		private void Window_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.P)
+			{
+				if (_game.Initialized)
+					_game.StopAnimation();
+			}
+			if (e.Key == Key.U)
+			{
+				if (_game.Initialized)
+					_game.StartAnimation();
+			}
+			if (e.Key == Key.Escape)
+			{
+				if (_game.Initialized)
+				{
+					_game.StartAnimation();
+					_game.Stop();
+					MainMenuGrid.Visibility = Visibility.Visible;
+				}
+			}
+		}
+
+		private void btnStart_Click(object sender, RoutedEventArgs e)
+		{
+			_game.Start();
+			MainMenuGrid.Visibility = Visibility.Hidden;
+		}
+
+		private void btnControls_Click(object sender, RoutedEventArgs e)
+		{
+			if (tblControls.Visibility == Visibility.Hidden)
+				tblControls.Visibility = Visibility.Visible;
+			else tblControls.Visibility = Visibility.Hidden;
+		}
+
+		private void btnLeaderboard_Click(object sender, RoutedEventArgs e)
+		{
+			if (tblLeaderboard.Visibility == Visibility.Hidden)
+				tblLeaderboard.Visibility = Visibility.Visible;
+			else tblLeaderboard.Visibility = Visibility.Hidden;
 		}
 	}
 

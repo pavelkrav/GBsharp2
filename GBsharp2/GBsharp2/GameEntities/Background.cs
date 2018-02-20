@@ -13,17 +13,17 @@ namespace GBsharp2.GameEntities
 {
 	class Background
 	{
-		protected List<BaseStar> _stars;
+		protected List<Star> _stars;
 		protected Grid _grid;
 		public bool Initialized { get; protected set; } = false;
 
 		public Background(Grid grid)
 		{
-			_stars = new List<BaseStar>();
+			_stars = new List<Star>();
 			_grid = grid;
 		}
 
-		public void Init(List<BaseStar> stars)
+		public void Init(List<Star> stars)
 		{
 			if (stars != null)
 			{
@@ -39,7 +39,7 @@ namespace GBsharp2.GameEntities
 				PRandom pr = new PRandom();
 				for (int i = 0; i < stars; i++)
 				{
-					_stars.Add(new BaseStar(_grid,
+					_stars.Add(new Star(_grid,
 						new Position(pr.Next((int)_grid.Width), pr.Next((int)_grid.Height), pr.NextDouble()),
 						new Vector(-15, 0)));
 				}

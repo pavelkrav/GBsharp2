@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{F2C48212-8DD1-40F2-9172-60F85F4BEC28}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GBsharp2</RootNamespace>
     <AssemblyName>GBsharp2</AssemblyName>
@@ -67,7 +67,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BaseObjects\BaseObject.cs" />
-    <Compile Include="BaseObjects\BaseStar.cs" />
+    <Compile Include="BaseObjects\Missile.cs" />
+    <Compile Include="BaseObjects\Star.cs" />
+    <Compile Include="BaseObjects\Player.cs" />
     <Compile Include="GameEntities\Background.cs" />
     <Compile Include="GameEntities\Game.cs" />
     <Compile Include="MainWindow.xaml.cs">

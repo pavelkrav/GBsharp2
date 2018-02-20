@@ -5,18 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GBsharp2"
         mc:Ignorable="d"
-        Title="GB Asteroids" Height="350" Width="525">
+        KeyDown="Window_KeyDown"
+        Title="GB Asteroids" Height="350" Width="525" ResizeMode="NoResize">
     <Grid Name="MainGrid" Visibility="Visible" Background="#090C13">
-        <Grid Name="MainMenu" Visibility="Visible" Background="Transparent">
-            
-        </Grid>
-
-        <Grid Name="GameGrid" Visibility="Hidden" Background="Transparent">
-
-        </Grid>
-
         <Grid Name="BackgroundGrid" Visibility="Visible" Background="Transparent">
 
+        </Grid>
+
+        <Grid Name="GameGrid" Visibility="Visible" Background="Transparent">
+
+        </Grid>
+
+        <Grid Name="MainMenuGrid" Visibility="Visible" Background="Transparent">
+            <Button Name="btnStart" Content="Start" HorizontalAlignment="Center" Margin="0,91,0,0" VerticalAlignment="Top" Width="132" Height="33"
+                    Background="LightBlue" Click="btnStart_Click"/>
+            <Button Name="btnControls" Content="Controls" HorizontalAlignment="Center" Margin="192,134,193,0" VerticalAlignment="Top" Width="132" Height="33"
+                    Background="LightBlue" Click="btnControls_Click"/>
+            <Button Name="btnLeaderboard" Content="Leaderboard" HorizontalAlignment="Center" Margin="192,177,193,0" VerticalAlignment="Top" Width="132" Height="33"
+                    Background="LightBlue" Click="btnLeaderboard_Click"/>
+            <TextBlock Name="tblControls" HorizontalAlignment="Left" Height="119" Margin="345,91,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="126"
+                    Background="LightBlue" Text="" Visibility="Hidden"/>
+            <TextBlock Name="tblLeaderboard" HorizontalAlignment="Left" Height="119" Margin="45,91,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="127"
+                    Background="LightBlue" Text="Your leaderboard will be here!" Visibility="Hidden"/>
         </Grid>
     </Grid>
 </Window>

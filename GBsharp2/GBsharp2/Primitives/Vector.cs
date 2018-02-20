@@ -25,5 +25,15 @@ namespace GBsharp2.Primitives
 			Y = y;
 			Z = z;
 		}
+
+		public Vector Copy()
+		{
+			return new Vector(X, Y, Z);
+		}
+
+		public static Vector operator +(Vector left, Vector right)
+		{
+			return new Vector(left.X + right.X, left.Y + right.Y, left.Z + right.Z);
+		}
 	}
 }

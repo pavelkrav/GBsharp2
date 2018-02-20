@@ -10,7 +10,7 @@ using System.Windows.Media;
 
 namespace GBsharp2.BaseObjects
 {
-	class BaseObject
+	abstract class BaseObject
 	{
 		protected Position _pos;
 		protected Vector _vec;
@@ -67,7 +67,8 @@ namespace GBsharp2.BaseObjects
 
 		public virtual void Draw()
 		{
-			DrawOnCanvas();
+			if (!(_canvas != null && _vec.Z == 0))
+				DrawOnCanvas();
 			if (!_onGrid)
 			{
 				_grid.Children.Add(_canvas);

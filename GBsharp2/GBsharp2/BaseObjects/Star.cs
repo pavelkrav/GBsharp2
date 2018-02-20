@@ -11,12 +11,12 @@ using System.Windows.Media;
 
 namespace GBsharp2.BaseObjects
 {
-	class BaseStar : BaseObject
+	class Star : BaseObject
 	{
 		private int _drawStyle;
 		private static int DrawStyles { get; } = 2;
 
-		public BaseStar(Grid grid, Position pos, Vector vec, double size = 1.0) : base(grid, pos, vec, size)
+		public Star(Grid grid, Position pos, Vector vec, double size = 1.0) : base(grid, pos, vec, size)
 		{
 			_drawStyle = new PRandom().Next(DrawStyles);
 		}
@@ -54,7 +54,11 @@ namespace GBsharp2.BaseObjects
 		{
 			base.Update(fps);
 			if (_pos.X < 0 - _canvas.Width)
+			{
 				_pos.X = _grid.Width + _canvas.Width;
+				_pos.Y = new PRandom().Next((int)_grid.Height);
+				_pos.Z = new PRandom().NextDouble();
+			}
 		}
 	}
 }

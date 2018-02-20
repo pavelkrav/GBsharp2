@@ -9,13 +9,14 @@ namespace GBsharp2.Primitives
 	class PRandom
 	{
 		public static int Seed { get; private set; } = new Random().Next();
+		public static Random SeedMultiplier { get; private set; } = new Random();
 		private Random _rand;
 
 		public PRandom()
 		{
 			if (Seed == int.MaxValue)
 				Seed = int.MinValue;
-			_rand = new Random(Seed++);
+			_rand = new Random((int)(Seed++ * SeedMultiplier.NextDouble()));
 		}
 
 		public int Next()

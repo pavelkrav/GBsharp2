@@ -30,6 +30,11 @@ namespace GBsharp2.Primitives
 			Z = z;
 		}
 
+		public Position Copy()
+		{
+			return new Position(X, Y, Z);
+		}
+
 		public Point ToPoint()
 		{
 			return new Point(X, Y);
