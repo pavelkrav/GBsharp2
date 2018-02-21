@@ -50,7 +50,7 @@ namespace GBsharp2.BaseObjects
 			}
 		}
 
-		public override void Update(int fps = 1)
+		public override void Update(double fps = 1)
 		{
 			base.Update(fps);
 			if (_pos.X < 0 - _canvas.Width)
@@ -58,6 +58,7 @@ namespace GBsharp2.BaseObjects
 				_pos.X = _grid.Width + _canvas.Width;
 				_pos.Y = new PRandom().Next((int)_grid.Height);
 				_pos.Z = new PRandom().NextDouble();
+				DrawOnCanvas();
 			}
 		}
 	}

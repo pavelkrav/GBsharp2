@@ -13,9 +13,9 @@ namespace GBsharp2.GameEntities
 {
 	class Background
 	{
-		protected List<Star> _stars;
-		protected Grid _grid;
-		public bool Initialized { get; protected set; } = false;
+		private List<Star> _stars;
+		private Grid _grid;
+		public bool Initialized { get; private set; } = false;
 
 		public Background(Grid grid)
 		{
@@ -55,7 +55,7 @@ namespace GBsharp2.GameEntities
 			}
 		}
 
-		public void Update(int fps = 1)
+		public void Update(double fps = 1)
 		{
 			foreach (var s in _stars)
 			{

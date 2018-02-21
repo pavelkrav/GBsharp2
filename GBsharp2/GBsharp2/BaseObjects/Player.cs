@@ -19,6 +19,10 @@ namespace GBsharp2.BaseObjects
 		public static double Damping { get; set; } = 55.0;
 		public static double BumpDamping { get; set; } = 2.0;
 
+		private List<Missile> _missiles;
+		private int _lastShot = 0;
+		private double _shotsPerSec = 2.5;
+
 		public Position Pos { get { return _pos.Copy(); } }
 		public GBsharp2.Primitives.Vector Vec { get { return _vec.Copy(); } }
 		public double Height { get { return _canvas.Height; } }
@@ -26,7 +30,7 @@ namespace GBsharp2.BaseObjects
 
 		public Player(Grid grid, Position pos, GBsharp2.Primitives.Vector vec, double size = 1.0) : base(grid, pos, vec, size)
 		{
-			
+			_missiles = new List<Missile>();
 		}
 
 		protected override void DrawOnCanvas()
@@ -60,27 +64,59 @@ namespace GBsharp2.BaseObjects
 			_canvas.Height = h;
 		}
 
-		public void KeyUp(int fps = 1)
+		public override void Remove()
+		{
+			base.Remove();
+			for (int i = 0; i < _missiles.Count; i++)
+			{
+				_missiles[i].Remove();
+			}
+			_missiles = null;
+		}
+
+		public override void Draw()
+		{
+			base.Draw();
+			for (int i = 0; i < _missiles.Count; i++)
+			{
+				_missiles[i].Draw();
+			}
+		}
+
+		public void CreateMissile(double fps)
+		{
+			if (_lastShot >= fps / _shotsPerSec)
+			{
+				Position p = Pos;
+				p.Y += Height / 2;
+				Missile m = new Missile(_grid, p, new GBsharp2.Primitives.Vector(Missile.Acceleration, 0) + Vec);
+				m.Draw();
+				_missiles.Add(m);
+				_lastShot = 0;
+			}
+		}
+
+		public void KeyUp(double fps = 1)
 		{
 			_vec.Y -= Acceleration / fps;
 		}
 
-		public void KeyDown(int fps = 1)
+		public void KeyDown(double fps = 1)
 		{
 			_vec.Y += Acceleration / fps;
 		}
 
-		public void KeyRight(int fps = 1)
+		public void KeyRight(double fps = 1)
 		{
 			_vec.X += Acceleration / fps;
 		}
 
-		public void KeyLeft(int fps = 1)
+		public void KeyLeft(double fps = 1)
 		{
 			_vec.X -= Acceleration / fps;
 		}
 
-		private void TickDamping(int fps = 1)
+		private void TickDamping(double fps = 1)
 		{
 			if (_vec.Y > 0)
 			{
@@ -109,7 +145,7 @@ namespace GBsharp2.BaseObjects
 			}
 		}
 
-		public override void Update(int fps = 1)
+		public override void Update(double fps = 1)
 		{
 			base.Update(fps);
 			TickDamping(fps);
@@ -135,6 +171,19 @@ namespace GBsharp2.BaseObjects
 				_pos.Y = _grid.ActualHeight - _canvas.ActualHeight - 45;
 				_vec.Y = -_vec.Y / BumpDamping;
 			}
+
+			for (int i = 0; i < _missiles.Count; i++)
+			{
+				_missiles[i].Update(fps);
+				if (_missiles[i].ToRemove)
+				{
+					_missiles[i].Remove();
+					_missiles.Remove(_missiles[i]);
+				}
+			}
+
+			if (_lastShot < fps / _shotsPerSec)
+				_lastShot++;
 		}
 	}
 }

@@ -88,7 +88,7 @@ namespace GBsharp2.BaseObjects
 			}
 		}
 
-		public virtual void Update(int fps = 1)
+		public virtual void Update(double fps = 1)
 		{
 			_pos.X += _vec.X / (_pos.Z + 1) / fps;
 			_pos.Y += _vec.Y / (_pos.Z + 1) / fps;

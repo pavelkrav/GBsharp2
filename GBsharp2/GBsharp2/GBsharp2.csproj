@@ -66,10 +66,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BaseObjects\Asteroid.cs" />
     <Compile Include="BaseObjects\BaseObject.cs" />
     <Compile Include="BaseObjects\Missile.cs" />
     <Compile Include="BaseObjects\Star.cs" />
     <Compile Include="BaseObjects\Player.cs" />
+    <Compile Include="GameEntities\AsteroidField.cs" />
     <Compile Include="GameEntities\Background.cs" />
     <Compile Include="GameEntities\Game.cs" />
     <Compile Include="MainWindow.xaml.cs">

@@ -21,16 +21,14 @@ namespace GBsharp2.GameEntities
 	{
 		public Background Background { get; private set; }
 		private Player _player;
-		private List<Missile> _missiles;
-		private int _lastShot = 0;
-		private double _shotsPerSec = 2.5;
+		private AsteroidField _asteroidField;
 
 		//public GameState GameState { get; private set; }
 		public bool Initialized { get; private set; } = false;
 
 		private Grid _gameGrid;
 		private DispatcherTimer _timer;
-		public int Fps { get; set; } = 30;
+		public double Fps { get; set; } = 30;
 
 		public Game(Grid backgroundGrid, Grid gameGrid)
 		{
@@ -50,8 +48,9 @@ namespace GBsharp2.GameEntities
 			if (!Initialized)
 			{
 				_player = new Player(_gameGrid, new Position(40, _gameGrid.Height / 2), new Vector(0, 0));
-				_missiles = new List<Missile>();
 				_player.Draw();
+				//_asteroids = new List<Asteroid>();
+				//_shotsPerSec *= _speed;
 				Initialized = true;
 			}
 		}
@@ -62,11 +61,12 @@ namespace GBsharp2.GameEntities
 			{
 				_player.Remove();
 				_player = null;
-				for (int i = 0; i < _missiles.Count; i++)
-				{
-					_missiles[i].Remove();
-				}
-				_missiles = null;
+
+				//for (int i = 0; i < _asteroids.Count; i++)
+				//{
+				//	_asteroids[i].Remove();
+				//}
+				//_asteroids = null;
 
 				Initialized = false;
 			}
@@ -92,21 +92,9 @@ namespace GBsharp2.GameEntities
 				KeyboardTick();
 				_player.Update(Fps);
 				_player.Draw();
-
-				for (int i = 0; i < _missiles.Count; i++)
-				{
-					_missiles[i].Update(Fps);
-					_missiles[i].Draw();
-					if (_missiles[i].ToRemove)
-					{
-						_missiles[i].Remove();
-						_missiles.Remove(_missiles[i]);
-					}
-				}
-
-				if (_lastShot < Fps / _shotsPerSec)
-					_lastShot++;
 			}
+
+			//Console.WriteLine(BaseObject.TotalObjects);
 		}
 
 		private void KeyboardTick()
@@ -130,20 +118,7 @@ namespace GBsharp2.GameEntities
 
 			if (Keyboard.IsKeyDown(Key.Space))
 			{
-				CreateMissile();
-			}
-		}
-
-		private void CreateMissile()
-		{
-			if (_lastShot >= Fps / _shotsPerSec)
-			{
-				Position p = _player.Pos;
-				p.Y += _player.Height / 2;
-				Missile m = new Missile(_gameGrid, p, new Vector(Missile.Acceleration, 0) + _player.Vec);
-				m.Draw();
-				_missiles.Add(m);
-				_lastShot = 0;
+				_player.CreateMissile(Fps);
 			}
 		}
 	}

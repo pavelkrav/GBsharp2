@@ -53,7 +53,7 @@ namespace GBsharp2.BaseObjects
 			_canvas.Height = h;
 		}
 
-		private void TickDamping(int fps = 1)
+		private void TickDamping(double fps = 1)
 		{
 			if (_vec.X > 0)
 			{
@@ -69,7 +69,7 @@ namespace GBsharp2.BaseObjects
 			}
 		}
 
-		public override void Update(int fps = 1)
+		public override void Update(double fps = 1)
 		{
 			base.Update(fps);
 			TickDamping(fps);
