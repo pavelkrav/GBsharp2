@@ -49,8 +49,9 @@ namespace GBsharp2.GameEntities
 			{
 				_player = new Player(_gameGrid, new Position(40, _gameGrid.Height / 2), new Vector(0, 0));
 				_player.Draw();
-				//_asteroids = new List<Asteroid>();
-				//_shotsPerSec *= _speed;
+				_asteroidField = new AsteroidField(_gameGrid);
+				_asteroidField.Init();
+				_asteroidField.Draw();
 				Initialized = true;
 			}
 		}
@@ -61,13 +62,8 @@ namespace GBsharp2.GameEntities
 			{
 				_player.Remove();
 				_player = null;
-
-				//for (int i = 0; i < _asteroids.Count; i++)
-				//{
-				//	_asteroids[i].Remove();
-				//}
-				//_asteroids = null;
-
+				_asteroidField.Remove();
+				_asteroidField = null;
 				Initialized = false;
 			}
 		}
@@ -92,8 +88,9 @@ namespace GBsharp2.GameEntities
 				KeyboardTick();
 				_player.Update(Fps);
 				_player.Draw();
+				_asteroidField.Update(Fps);
+				_asteroidField.Draw();
 			}
-
 			//Console.WriteLine(BaseObject.TotalObjects);
 		}
 

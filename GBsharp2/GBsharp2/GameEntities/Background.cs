@@ -17,6 +17,8 @@ namespace GBsharp2.GameEntities
 		private Grid _grid;
 		public bool Initialized { get; private set; } = false;
 
+		public static double StarsDefaultSpeed { get; set; } = 15;
+
 		public Background(Grid grid)
 		{
 			_stars = new List<Star>();
@@ -41,7 +43,7 @@ namespace GBsharp2.GameEntities
 				{
 					_stars.Add(new Star(_grid,
 						new Position(pr.Next((int)_grid.Width), pr.Next((int)_grid.Height), pr.NextDouble()),
-						new Vector(-15, 0)));
+						new Vector(-StarsDefaultSpeed, 0)));
 				}
 				Initialized = true;
 			}
