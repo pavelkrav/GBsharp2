@@ -83,7 +83,7 @@ namespace GBsharp2.BaseObjects
 			{
 				_vec.Y = -_vec.Y;
 			}
-			else if (_pos.Y > _grid.ActualHeight - _canvas.ActualHeight - 45)
+			else if (_pos.Y > _grid.Height - _canvas.Height - 45)
 			{
 				_vec.Y = -_vec.Y;
 			}

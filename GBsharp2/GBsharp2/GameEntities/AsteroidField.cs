@@ -20,13 +20,13 @@ namespace GBsharp2.GameEntities
 		public bool Initialized { get; private set; } = false;
 		private DateTime _initTime;
 
-		public static double AsteroidsDefaultSpeed { get; set; } = 35;
-
 		public AsteroidField(Grid grid)
 		{
 			_asteroids = new List<Asteroid>();
 			_grid = grid;
 		}
+
+		public event EventHandler<AddScoreEventArgs> AddScore;
 
 		public void Init()
 		{
@@ -34,18 +34,27 @@ namespace GBsharp2.GameEntities
 			{
 				_initTime = DateTime.Now;
 				Initialized = true;
-				_asteroids.Add(CreateAsteroid());
-				_asteroids.Add(CreateAsteroid());
-				_asteroids.Add(CreateAsteroid());
+				for (int i = 0; i < 20; i++)
+				{
+					AddAsteroid();
+				}
 			}
 		}
 
 		private Asteroid CreateAsteroid()
 		{
 			PRandom pr = new PRandom();
-			return new Asteroid(_grid, new Position((int)_grid.Width, pr.Next((int)_grid.Height)),
-				new	Vector(pr.Next((int)-AsteroidsDefaultSpeed * 2, (int)-AsteroidsDefaultSpeed), 0),
+			return new Asteroid(_grid, new Position((int)_grid.Width, pr.Next((int)(_grid.Height - 80))), // -80
+				new	Vector(pr.Next((int)(-Asteroid.AsteroidsDefaultSpeed * 2), (int)(-Asteroid.AsteroidsDefaultSpeed)), pr.Next((int)(-Asteroid.AsteroidsDefaultSpeed / 2), (int)(Asteroid.AsteroidsDefaultSpeed / 2))),
 				asteroidSize: 3);
+		}
+
+		private void AddAsteroid()
+		{
+			Asteroid a = CreateAsteroid();
+			a.AsteroidDestroyed += OnAsteroidDestroyed;
+			a.AsteroidMissed += OnAsteroidMissed;
+			_asteroids.Add(a);
 		}
 
 		public void Draw()
@@ -58,9 +67,14 @@ namespace GBsharp2.GameEntities
 
 		public void Update(double fps = 1)
 		{
-			foreach (var a in _asteroids)
+			for (int i = 0; i < _asteroids.Count; i++)
 			{
-				a.Update(fps);
+				_asteroids[i].Update(fps);
+				if (_asteroids[i].ToRemove)
+				{
+					_asteroids[i].Remove();
+					_asteroids.Remove(_asteroids[i]);
+				}
 			}
 			// add new asteroids here
 		}
@@ -76,6 +90,26 @@ namespace GBsharp2.GameEntities
 				_asteroids = null;
 				Initialized = false;
 			}
+		}
+
+		public void OnAsteroidMissed(object sender, EventArgs e)
+		{
+			AddScore?.Invoke(this, new AddScoreEventArgs(-(sender as Asteroid).MissPenalty));
+		}
+
+		public void OnAsteroidDestroyed(object sender, EventArgs e)
+		{
+			AddScore?.Invoke(this, new AddScoreEventArgs(-(sender as Asteroid).DestroyBounty));
+		}
+	}
+
+	public class AddScoreEventArgs : EventArgs
+	{
+		public double Score { get; private set; }
+
+		public AddScoreEventArgs(double score)
+		{
+			Score = score;
 		}
 	}
 }

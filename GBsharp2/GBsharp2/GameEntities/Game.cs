@@ -30,6 +30,8 @@ namespace GBsharp2.GameEntities
 		private DispatcherTimer _timer;
 		public double Fps { get; set; } = 30;
 
+		public double Score { get; private set; }
+
 		public Game(Grid backgroundGrid, Grid gameGrid)
 		{
 			Background = new Background(backgroundGrid);
@@ -50,6 +52,7 @@ namespace GBsharp2.GameEntities
 				_player = new Player(_gameGrid, new Position(40, _gameGrid.Height / 2), new Vector(0, 0));
 				_player.Draw();
 				_asteroidField = new AsteroidField(_gameGrid);
+				_asteroidField.AddScore += OnScoreAdd;
 				_asteroidField.Init();
 				_asteroidField.Draw();
 				Initialized = true;
@@ -117,6 +120,11 @@ namespace GBsharp2.GameEntities
 			{
 				_player.CreateMissile(Fps);
 			}
+		}
+
+		private void OnScoreAdd(object sender, AddScoreEventArgs e)
+		{
+			Score += e.Score;
 		}
 	}
 }

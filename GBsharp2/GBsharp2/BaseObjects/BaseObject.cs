@@ -16,7 +16,7 @@ namespace GBsharp2.BaseObjects
 		protected Vector _vec;
 		protected double _size;
 
-		protected static int DefaultSize { get; } = 10;
+		public static int DefaultSize { get; } = 10;
 		public static uint TotalObjects { get; private set; } = 0;
 
 		protected Canvas _canvas;
