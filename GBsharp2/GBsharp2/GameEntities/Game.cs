@@ -31,8 +31,10 @@ namespace GBsharp2.GameEntities
 		public double Fps { get; set; } = 30;
 
 		public double Score { get; private set; }
+		public double HP { get { return _player.HP; } }
 
 		public event EventHandler<EventArgs> ScoreChanged;
+		public event EventHandler<EventArgs> PlayerHpChanged;
 		public event EventHandler<EventArgs> GameOver;
 
 		public Game(Grid backgroundGrid, Grid gameGrid)
@@ -54,6 +56,7 @@ namespace GBsharp2.GameEntities
 			{
 				_player = new Player(_gameGrid, new Position(40, _gameGrid.Height / 2), new Vector(0, 0));
 				_player.Death += OnPlayerDeath;
+				_player.HpChanged += OnPlayerHpChanged;
 				_player.Draw();
 				_asteroidField = new AsteroidField(_gameGrid);
 				_asteroidField.AddScore += OnScoreAdd;
@@ -74,6 +77,7 @@ namespace GBsharp2.GameEntities
 				_asteroidField = null;
 				ScoreChanged = null;
 				GameOver = null;
+				PlayerHpChanged = null;
 				Initialized = false;
 			}
 		}
@@ -139,6 +143,11 @@ namespace GBsharp2.GameEntities
 		private void OnPlayerDeath(object sender, EventArgs e)
 		{
 			GameOver?.Invoke(this, new EventArgs());
+		}
+
+		private void OnPlayerHpChanged(object sender, EventArgs e)
+		{
+			PlayerHpChanged?.Invoke(this, new EventArgs());
 		}
 	}
 }

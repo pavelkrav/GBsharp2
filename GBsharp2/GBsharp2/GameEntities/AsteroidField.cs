@@ -133,6 +133,8 @@ namespace GBsharp2.GameEntities
 				if (ast.PlayerCollides(player))
 				{
 					player.HitByAsteroid(ast);
+					ast.ToRemove = true;
+					ast.Remove();
 				}
 			}
 			if (toAdd.Count > 0)

@@ -1,13 +1,16 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using GBsharp2.GameEntities;
+using GBsharp2.Leaderboard;
 
 namespace GBsharp2
 {
 	public partial class MainWindow : Window
 	{
 		private Game _game;
+		private Lboard _lboard;
 
 		public MainWindow()
 		{
@@ -34,6 +37,14 @@ namespace GBsharp2
 			GameGrid.Height = h;
 
 			tblControls.Text = "Move : ← ↑ → ↓\nFire : Spacebar\nPause : P\nUnpause : U\nMain menu : Esc";
+
+			_lboard = Lboard.Load();
+		}
+
+		protected override void OnClosing(CancelEventArgs e)
+		{
+			_lboard.Save();
+			base.OnClosing(e);
 		}
 
 		private void Window_KeyDown(object sender, KeyEventArgs e)
@@ -59,8 +70,11 @@ namespace GBsharp2
 			_game.Start();
 			_game.ScoreChanged += OnScoreChanged;
 			_game.GameOver += OnGameOver;
-			tbxScore.Text = "0";
+			_game.PlayerHpChanged += OnPlayerHpChanged;
+			tbxScore.Text = "Score: " + _game.Score.ToString("F0");
+			tbxHp.Text = "HP: " + _game.HP.ToString("F0");
 			tbxScore.Visibility = Visibility.Visible;
+			tbxHp.Visibility = Visibility.Visible;
 			MainMenuGrid.Visibility = Visibility.Hidden;
 		}
 
@@ -68,10 +82,15 @@ namespace GBsharp2
 		{
 			if (_game.Initialized)
 			{
+				double score = _game.Score;
 				_game.StartAnimation();
 				_game.Stop();
-				MainMenuGrid.Visibility = Visibility.Visible;
+				LeaderboardGrid.Visibility = Visibility.Visible;
 				tbxScore.Visibility = Visibility.Hidden;
+				tbxHp.Visibility = Visibility.Hidden;
+				lblScore.Content = score.ToString("F0");
+				tblControls.Visibility = Visibility.Hidden;
+				tblLeaderboard.Visibility = Visibility.Hidden;
 			}
 		}
 
@@ -90,18 +109,34 @@ namespace GBsharp2
 		private void btnLeaderboard_Click(object sender, RoutedEventArgs e)
 		{
 			if (tblLeaderboard.Visibility == Visibility.Hidden)
+			{
 				tblLeaderboard.Visibility = Visibility.Visible;
+				tblLeaderboard.Text = _lboard.GetLeaders();
+			}
 			else tblLeaderboard.Visibility = Visibility.Hidden;
 		}
 
 		private void OnScoreChanged(object sender, EventArgs e)
 		{
-			tbxScore.Text = (sender as Game).Score.ToString("F0");
+			tbxScore.Text = "Score: " + (sender as Game).Score.ToString("F0");
+		}
+
+		private void OnPlayerHpChanged(object sender, EventArgs e)
+		{
+			tbxHp.Text = "HP: " + (sender as Game).HP.ToString("F0");
 		}
 
 		public void OnGameOver(object sender, EventArgs e)
 		{
 			StopGame();
+		}
+
+		private void btnOK_Click(object sender, RoutedEventArgs e)
+		{
+			ExPlayer player = new ExPlayer(tbxName.Text, Convert.ToDouble(lblScore.Content));
+			_lboard.Players.Add(player);
+			MainMenuGrid.Visibility = Visibility.Visible;
+			LeaderboardGrid.Visibility = Visibility.Hidden;
 		}
 	}
 

@@ -13,7 +13,8 @@
         </Grid>
 
         <Grid Name="GameGrid" Visibility="Visible" Background="Transparent">
-            <TextBox Name="tbxScore" FontSize="16" Visibility="Hidden" HorizontalAlignment="Left" BorderThickness="0" Background="Transparent" Foreground="White" Text="0" Height="27" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="66"/>
+            <TextBox Name="tbxScore" Focusable="False" FontSize="16" Visibility="Hidden" HorizontalAlignment="Left" BorderThickness="0" Background="Transparent" Foreground="LightBlue" Text="0" Height="22" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="499"/>
+            <TextBox Name="tbxHp" Focusable="False" FontSize="16" Visibility="Hidden" HorizontalAlignment="Left" BorderThickness="0" Background="Transparent" Foreground="LightBlue" Height="22" Margin="10,32,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="499"/>
         </Grid>
 
         <Grid Name="MainMenuGrid" Visibility="Visible" Background="Transparent">
@@ -27,6 +28,15 @@
                     Background="LightBlue" Text="" Visibility="Hidden"/>
             <TextBlock Name="tblLeaderboard" HorizontalAlignment="Left" Height="119" Margin="45,91,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="127"
                     Background="LightBlue" Text="Your leaderboard will be here!" Visibility="Hidden"/>
+        </Grid>
+
+        <Grid Name="LeaderboardGrid" Visibility="Hidden" Background="Transparent">
+            <Button Name="btnOK" Content="OK" HorizontalAlignment="Center" Margin="192,177,193,0" VerticalAlignment="Top" Width="132" Height="33"
+                    Background="LightBlue" Click="btnOK_Click"/>
+            <Label Content="Put your name here" FontSize="16" Foreground="LightBlue" HorizontalAlignment="Left" Height="30" Margin="184,53,0,0" VerticalAlignment="Top" Width="150"/>
+            <TextBox Name="tbxName" Background="LightBlue" HorizontalAlignment="Left" Height="20" Margin="176,109,0,0" TextWrapping="Wrap" Text="Unknown" VerticalAlignment="Top" Width="168"/>
+            <Label Name="lblScore" Focusable="False" HorizontalContentAlignment="Center" FontSize="16" Foreground="LightBlue" HorizontalAlignment="Left" Height="30" Margin="10,134,0,0" VerticalAlignment="Top" Width="499"/>
+
         </Grid>
     </Grid>
 </Window>

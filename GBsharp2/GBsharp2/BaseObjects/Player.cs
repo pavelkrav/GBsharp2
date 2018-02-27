@@ -37,6 +37,7 @@ namespace GBsharp2.BaseObjects
 		}
 
 		public event EventHandler<EventArgs> Death;
+		public event EventHandler<EventArgs> HpChanged;
 
 		protected override void DrawOnCanvas()
 		{
@@ -78,6 +79,7 @@ namespace GBsharp2.BaseObjects
 			}
 			Missiles = null;
 			Death = null;
+			HpChanged = null;
 		}
 
 		public override void Draw()
@@ -104,7 +106,8 @@ namespace GBsharp2.BaseObjects
 
 		public void HitByAsteroid(Asteroid asteroid)
 		{
-			HP = 0;
+			HP -= asteroid.Size;
+			HpChanged?.Invoke(this, new EventArgs());
 		}
 
 		public void KeyUp(double fps = 1)
