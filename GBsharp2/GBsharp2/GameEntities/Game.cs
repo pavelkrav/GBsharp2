@@ -17,7 +17,7 @@ namespace GBsharp2.GameEntities
 {
 	//enum GameState { Void, Running, Paused }
 
-	class Game
+	public class Game
 	{
 		public Background Background { get; private set; }
 		private Player _player;
@@ -31,6 +31,9 @@ namespace GBsharp2.GameEntities
 		public double Fps { get; set; } = 30;
 
 		public double Score { get; private set; }
+
+		public event EventHandler<EventArgs> ScoreChanged;
+		public event EventHandler<EventArgs> GameOver;
 
 		public Game(Grid backgroundGrid, Grid gameGrid)
 		{
@@ -50,11 +53,13 @@ namespace GBsharp2.GameEntities
 			if (!Initialized)
 			{
 				_player = new Player(_gameGrid, new Position(40, _gameGrid.Height / 2), new Vector(0, 0));
+				_player.Death += OnPlayerDeath;
 				_player.Draw();
 				_asteroidField = new AsteroidField(_gameGrid);
 				_asteroidField.AddScore += OnScoreAdd;
 				_asteroidField.Init();
 				_asteroidField.Draw();
+				Score = 0;
 				Initialized = true;
 			}
 		}
@@ -67,6 +72,8 @@ namespace GBsharp2.GameEntities
 				_player = null;
 				_asteroidField.Remove();
 				_asteroidField = null;
+				ScoreChanged = null;
+				GameOver = null;
 				Initialized = false;
 			}
 		}
@@ -89,10 +96,11 @@ namespace GBsharp2.GameEntities
 			if (Initialized)
 			{
 				KeyboardTick();
-				_player.Update(Fps);
-				_player.Draw();
-				_asteroidField.Update(Fps);
-				_asteroidField.Draw();
+				_player?.Update(Fps);
+				_player?.Draw();
+				_asteroidField?.Update(Fps);
+				_asteroidField?.Draw();
+				_asteroidField?.CollisionTick(_player);
 			}
 			//Console.WriteLine(BaseObject.TotalObjects);
 		}
@@ -125,6 +133,12 @@ namespace GBsharp2.GameEntities
 		private void OnScoreAdd(object sender, AddScoreEventArgs e)
 		{
 			Score += e.Score;
+			ScoreChanged?.Invoke(this, new EventArgs());
+		}
+
+		private void OnPlayerDeath(object sender, EventArgs e)
+		{
+			GameOver?.Invoke(this, new EventArgs());
 		}
 	}
 }

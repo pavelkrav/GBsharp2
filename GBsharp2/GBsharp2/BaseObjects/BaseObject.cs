@@ -10,7 +10,7 @@ using System.Windows.Media;
 
 namespace GBsharp2.BaseObjects
 {
-	abstract class BaseObject
+	public abstract class BaseObject
 	{
 		protected Position _pos;
 		protected Vector _vec;

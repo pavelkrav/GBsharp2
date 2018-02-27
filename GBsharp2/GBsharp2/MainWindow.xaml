@@ -13,7 +13,7 @@
         </Grid>
 
         <Grid Name="GameGrid" Visibility="Visible" Background="Transparent">
-
+            <TextBox Name="tbxScore" FontSize="16" Visibility="Hidden" HorizontalAlignment="Left" BorderThickness="0" Background="Transparent" Foreground="White" Text="0" Height="27" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="66"/>
         </Grid>
 
         <Grid Name="MainMenuGrid" Visibility="Visible" Background="Transparent">

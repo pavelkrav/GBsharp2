@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace GBsharp2.Primitives
 {
-	class Position
+	public class Position
 	{
 		public double X { get; set; }
 		public double Y { get; set; }
@@ -28,6 +28,16 @@ namespace GBsharp2.Primitives
 			X = x;
 			Y = y;
 			Z = z;
+		}
+
+		public static double DistanceD2 (Position p1, Position p2)
+		{
+			return Math.Sqrt((p2.X - p1.X) * (p2.X - p1.X) + (p2.Y - p1.Y) * (p2.Y - p1.Y));
+		}
+
+		public static double DistanceD3(Position p1, Position p2)
+		{
+			return Math.Sqrt((p2.X - p1.X) * (p2.X - p1.X) + (p2.Y - p1.Y) * (p2.Y - p1.Y) + (p2.Z - p1.Z) * (p2.Z - p1.Z));
 		}
 
 		public Position Copy()

@@ -12,7 +12,7 @@ using System.Windows;
 
 namespace GBsharp2.BaseObjects
 {
-	class Asteroid : BaseObject
+	public class Asteroid : BaseObject
 	{
 		public Brush Color { get; set; } = Brushes.Gray;
 
@@ -21,7 +21,10 @@ namespace GBsharp2.BaseObjects
 		public static double DefaultBounty { get; set; } = 24.0;
 		public double DestroyBounty { get { return DefaultBounty / (_asteroidSize + 1); } }
 		public double MissPenalty { get { return DefaultBounty / (Sizes + 1 - _asteroidSize); } }
-		public static double AsteroidsDefaultSpeed { get; set; } = 35;
+		public static double AsteroidsDefaultSpeed { get; set; } = 30;
+
+		public Position Pos { get { return _pos.Copy(); } }
+		public byte Size { get { return _asteroidSize; } }
 
 		public bool ToRemove { get; set; } = false;
 
@@ -57,30 +60,78 @@ namespace GBsharp2.BaseObjects
 			_canvas.Height = wh;
 		}
 
+		public override void Remove()
+		{
+			base.Remove();
+			AsteroidMissed = null;
+			AsteroidDestroyed = null;
+		}
+
 		public override void Update(double fps = 1)
 		{
-			base.Update(fps);
-			if (_pos.X < 0 - _canvas.Width)
+			if (!ToRemove)
 			{
-				ToRemove = true;
-				AsteroidMissed?.Invoke(this, new EventArgs());
+				base.Update(fps);
+				if (_pos.X < 0 - _canvas.Width)
+				{
+					ToRemove = true;
+					AsteroidMissed?.Invoke(this, new EventArgs());
+				}
+				else if (_pos.Y < 0)
+				{
+					_vec.Y = -_vec.Y;
+				}
+				else if (_pos.Y > _grid.Height - _canvas.Height - 45)
+				{
+					_vec.Y = -_vec.Y;
+				}
 			}
-			else if (_pos.Y < 0)
+		}
+
+		public bool MissileCollides(Missile missile)
+		{
+			if (!this.ToRemove && !missile.ToRemove)
 			{
-				_vec.Y = -_vec.Y;
+				Position o = Pos;
+				o.X += _canvas.Width / 2;
+				o.Y += _canvas.Height / 2;
+				Position m = missile.Pos;
+				m.X += BaseObject.DefaultSize;
+				if (Position.DistanceD2(o, m) < _canvas.Width / 2)
+					return true;
 			}
-			else if (_pos.Y > _grid.Height - _canvas.Height - 45)
+
+			return false;
+		}
+
+		public bool PlayerCollides(Player player)
+		{
+			if (!this.ToRemove)
 			{
-				_vec.Y = -_vec.Y;
+				Position o = Pos;
+				o.X += _canvas.Width / 2;
+				o.Y += _canvas.Height / 2;
+				Position p1 = player.Pos;
+				Position p2 = player.Pos;
+				p2.Y += player.Height;
+				Position p3 = player.Pos;
+				p3.X += player.Width;
+				p3.Y += player.Height / 2;
+				if (Position.DistanceD2(p1, o) < _canvas.Width / 2 ||
+					Position.DistanceD2(p2, o) < _canvas.Width / 2 ||
+					Position.DistanceD2(p3, o) < _canvas.Width / 2)
+					return true;
 			}
+
+			return false;
 		}
 
 		public List<Asteroid> Destroy()
 		{
 			List<Asteroid> result = new List<Asteroid>();
 			ToRemove = true;
-			Remove();
 			AsteroidDestroyed?.Invoke(this, new EventArgs());
+			Remove();
 			if (_asteroidSize != 1)
 			{
 				Asteroid a1 = new Asteroid(_grid, _pos.Copy(), _vec.Copy(), asteroidSize: (byte)(_asteroidSize - 1));

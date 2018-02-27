@@ -11,7 +11,7 @@ using System.Windows.Media;
 
 namespace GBsharp2.BaseObjects
 {
-	class Star : BaseObject
+	public class Star : BaseObject
 	{
 		private int _drawStyle;
 		private static int DrawStyles { get; } = 2;

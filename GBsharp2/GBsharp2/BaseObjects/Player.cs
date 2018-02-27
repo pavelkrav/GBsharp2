@@ -11,15 +11,17 @@ using System.Windows;
 
 namespace GBsharp2.BaseObjects
 {
-	class Player : BaseObject
+	public class Player : BaseObject
 	{
 		public Brush Color { get; set; } = Brushes.BlueViolet;
 
-		public static double Acceleration { get; set; } = 130.0;
+		public static double Acceleration { get; set; } = 140.0;
 		public static double Damping { get; set; } = 55.0;
 		public static double BumpDamping { get; set; } = 2.0;
 
-		private List<Missile> _missiles;
+		public double HP { get; private set; }
+
+		public List<Missile> Missiles { get; private set; }
 		private int _lastShot = 0;
 		private double _shotsPerSec = 2.5;
 
@@ -30,8 +32,11 @@ namespace GBsharp2.BaseObjects
 
 		public Player(Grid grid, Position pos, GBsharp2.Primitives.Vector vec, double size = 1.0) : base(grid, pos, vec, size)
 		{
-			_missiles = new List<Missile>();
+			Missiles = new List<Missile>();
+			HP = 10;
 		}
+
+		public event EventHandler<EventArgs> Death;
 
 		protected override void DrawOnCanvas()
 		{
@@ -67,19 +72,20 @@ namespace GBsharp2.BaseObjects
 		public override void Remove()
 		{
 			base.Remove();
-			for (int i = 0; i < _missiles.Count; i++)
+			for (int i = 0; i < Missiles.Count; i++)
 			{
-				_missiles[i].Remove();
+				Missiles[i].Remove();
 			}
-			_missiles = null;
+			Missiles = null;
+			Death = null;
 		}
 
 		public override void Draw()
 		{
 			base.Draw();
-			for (int i = 0; i < _missiles.Count; i++)
+			for (int i = 0; i < Missiles.Count; i++)
 			{
-				_missiles[i].Draw();
+				Missiles[i].Draw();
 			}
 		}
 
@@ -91,9 +97,14 @@ namespace GBsharp2.BaseObjects
 				p.Y += Height / 2;
 				Missile m = new Missile(_grid, p, new GBsharp2.Primitives.Vector(Missile.Acceleration, 0) + Vec);
 				m.Draw();
-				_missiles.Add(m);
+				Missiles.Add(m);
 				_lastShot = 0;
 			}
+		}
+
+		public void HitByAsteroid(Asteroid asteroid)
+		{
+			HP = 0;
 		}
 
 		public void KeyUp(double fps = 1)
@@ -172,18 +183,21 @@ namespace GBsharp2.BaseObjects
 				_vec.Y = -_vec.Y / BumpDamping;
 			}
 
-			for (int i = 0; i < _missiles.Count; i++)
+			for (int i = 0; i < Missiles.Count; i++)
 			{
-				_missiles[i].Update(fps);
-				if (_missiles[i].ToRemove)
+				Missiles[i].Update(fps);
+				if (Missiles[i].ToRemove)
 				{
-					_missiles[i].Remove();
-					_missiles.Remove(_missiles[i]);
+					Missiles[i].Remove();
+					Missiles.Remove(Missiles[i]);
 				}
 			}
 
 			if (_lastShot < fps / _shotsPerSec)
 				_lastShot++;
+
+			if (HP <= 0)
+				Death?.Invoke(this, new EventArgs());
 		}
 	}
 }

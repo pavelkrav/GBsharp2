@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GBsharp2.Primitives
 {
-	class PRandom
+	public class PRandom
 	{
 		public static int Seed { get; private set; } = new Random().Next();
 		public static Random SeedMultiplier { get; private set; } = new Random();

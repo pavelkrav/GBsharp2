@@ -11,7 +11,7 @@ using System.Windows.Media;
 
 namespace GBsharp2.GameEntities
 {
-	class Background
+	public class Background
 	{
 		private List<Star> _stars;
 		private Grid _grid;

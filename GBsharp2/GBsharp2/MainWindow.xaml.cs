@@ -1,20 +1,6 @@
 ﻿using System;
-using System.Threading;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using GBsharp2.Primitives;
-using GBsharp2.BaseObjects;
 using GBsharp2.GameEntities;
 
 namespace GBsharp2
@@ -64,19 +50,34 @@ namespace GBsharp2
 			}
 			if (e.Key == Key.Escape)
 			{
-				if (_game.Initialized)
-				{
-					_game.StartAnimation();
-					_game.Stop();
-					MainMenuGrid.Visibility = Visibility.Visible;
-				}
+				StopGame();
+			}
+		}
+
+		private void StartGame()
+		{
+			_game.Start();
+			_game.ScoreChanged += OnScoreChanged;
+			_game.GameOver += OnGameOver;
+			tbxScore.Text = "0";
+			tbxScore.Visibility = Visibility.Visible;
+			MainMenuGrid.Visibility = Visibility.Hidden;
+		}
+
+		private void StopGame()
+		{
+			if (_game.Initialized)
+			{
+				_game.StartAnimation();
+				_game.Stop();
+				MainMenuGrid.Visibility = Visibility.Visible;
+				tbxScore.Visibility = Visibility.Hidden;
 			}
 		}
 
 		private void btnStart_Click(object sender, RoutedEventArgs e)
 		{
-			_game.Start();
-			MainMenuGrid.Visibility = Visibility.Hidden;
+			StartGame();
 		}
 
 		private void btnControls_Click(object sender, RoutedEventArgs e)
@@ -91,6 +92,16 @@ namespace GBsharp2
 			if (tblLeaderboard.Visibility == Visibility.Hidden)
 				tblLeaderboard.Visibility = Visibility.Visible;
 			else tblLeaderboard.Visibility = Visibility.Hidden;
+		}
+
+		private void OnScoreChanged(object sender, EventArgs e)
+		{
+			tbxScore.Text = (sender as Game).Score.ToString("F0");
+		}
+
+		public void OnGameOver(object sender, EventArgs e)
+		{
+			StopGame();
 		}
 	}
 
